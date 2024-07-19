@@ -1,0 +1,35 @@
+server:
+  port: 9999
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+
+
+spring:
+  application:
+    name: Api-Gateway
+
+  cloud:
+    gateway:
+      routes[0]:
+        id: QUESTION-SERVICE
+        uri: lb://QUESTION-SERVICE
+        predicates[0]:
+          Path=/api/v1/questions/**
+
+      routes[1]:
+        id: QUIZ-SERVICE
+        uri: lb://QUIZ-SERVICE
+        predicates[0]:
+          Path=/api/v1/quiz/**
+
+      discovery:
+        locator:
+          enabled: true
+
+
+
+
+
