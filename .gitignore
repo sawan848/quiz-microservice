@@ -1,0 +1,5 @@
+.idea
+./api-gateway/target
+./question-service/target
+./quiz/target
+./service-registry/target
