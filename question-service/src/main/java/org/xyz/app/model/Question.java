@@ -110,5 +110,17 @@ public class Question {
         this.difficultyLevel = difficultyLevel;
     }
 
-
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", questionTitle='" + questionTitle + '\'' +
+                ", category='" + category + '\'' +
+                ", option1='" + option1 + '\'' +
+                ", option2='" + option2 + '\'' +
+                ", option3='" + option3 + '\'' +
+                ", rightAnswer='" + rightAnswer + '\'' +
+                ", difficultyLevel='" + difficultyLevel + '\'' +
+                '}';
+    }
 }

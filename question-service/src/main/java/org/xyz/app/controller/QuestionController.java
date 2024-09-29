@@ -35,6 +35,7 @@ public class QuestionController {
 
     @PostMapping("/save")
     public ResponseEntity<Question>saveQuestion(@RequestBody Question question){
+        System.out.println("question = " + question);
           return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(question));
 
     }

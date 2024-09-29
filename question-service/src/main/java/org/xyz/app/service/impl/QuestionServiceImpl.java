@@ -3,6 +3,8 @@ package org.xyz.app.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.xyz.app.dto.QuestionResponse;
 import org.xyz.app.dto.Response;
@@ -10,6 +12,7 @@ import org.xyz.app.exception.QuestionNotFoundException;
 import org.xyz.app.model.Question;
 import org.xyz.app.repositry.QuestionRepository;
 import org.xyz.app.service.QuestionService;
+import org.xyz.app.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +28,25 @@ import java.util.logging.Logger;
 @Slf4j
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
+    private final KafkaTemplate<String,Question>kafkaTemplate;
+    @Value("${spring.kafka.template.default-topic}")
+    private   String topic;
 
     @Autowired
-    public QuestionServiceImpl(QuestionRepository questionRepository) {
+    public QuestionServiceImpl(QuestionRepository questionRepository, KafkaTemplate<String, Question> kafkaTemplate) {
         this.questionRepository = questionRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
     public  Question saveQuestion(Question question) {
         try {
             log.info("Save Question {} into database!!",question.getId());
-            return questionRepository.save(question);
+            System.out.println("question = " + question);
+            System.out.println("topic = " + topic);
+            Question savedQuestion=questionRepository.save(question);
+            kafkaTemplate.send(Constants.TOPIC_NAME,savedQuestion);
+            return savedQuestion;
         } catch (QuestionNotFoundException e) {
             log.error(" Question {} is not save into database!! ",question.getId());
             throw new QuestionNotFoundException("Question is not inserted into a database!!");

@@ -14,3 +14,4 @@ public class QuestionServiceApplication {
 
 }
 //sometime
+//1 run docker exec -it my-postgres psql -U postgres
